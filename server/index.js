@@ -5,8 +5,12 @@ const numCPUs = require('os').cpus().length;
 
 const PORT = process.env.PORT || 5000;
 
+const MongoClient = require('mongodb').MongoClient;
+
+
 // Multi-process to utilize all CPU cores.
 if (cluster.isMaster) {
+  console.log(`Node cluster master ${process.pid} is running`);
   console.error(`Node cluster master ${process.pid} is running`);
 
   // Fork workers.
@@ -24,10 +28,30 @@ if (cluster.isMaster) {
   // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
+  let db;
+  MongoClient.connect(mongoURI, function(err, client) {
+    if(err)return console.log(err);
+    db = client.db('pymongo_test');
+
+    app.listen(PORT, function () {
+      console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`);
+    });
+  });
+
   // Answer API requests.
-  app.get('/api', function (req, res) {
-    res.set('Content-Type', 'application/json');
-    res.send('{"message":"Hello from the custom server!"}');
+  app.get('/api/playedsong', function (req, res) {
+    db.collection("playedsong").find().toArray(function (err, result) {
+      if(err) return console.log(err);
+      res.json(result);
+    });
+  });
+  
+  app.get('/api/timestamp', function (req, res) {
+    db.collection("timestamp").find().toArray(function (err, result) {
+      if(err) return console.log(err);
+      console.log(result);
+      res.json([{result}]);
+    });
   });
 
   // All remaining requests return the React app, so it can handle routing.
@@ -35,7 +59,4 @@ if (cluster.isMaster) {
     response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   });
 
-  app.listen(PORT, function () {
-    console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`);
-  });
 }
