@@ -1,18 +1,29 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Column, Table } from 'react-virtualized';
+import 'react-virtualized/styles.css';
+import './css/App.css';
+import styles from './css/table.css';
+
+// import ReactTable from "react-table";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: null,
+      data: null,
       fetching: true
     };
+
+    this._rowClassName = this._rowClassName.bind(this);
   }
 
   componentDidMount() {
-    fetch('/api')
+    this.getPlayedSong()
+  }
+
+  getPlayedSong(){
+    let fetchURL = '/api/playedsong';
+    fetch(fetchURL)
       .then(response => {
         if (!response.ok) {
           throw new Error(`status ${response.status}`);
@@ -20,39 +31,87 @@ class App extends Component {
         return response.json();
       })
       .then(json => {
+        // console.log(json);
         this.setState({
-          message: json.message,
+          data: json,
           fetching: false
         });
       }).catch(e => {
+      console.log(`Timestamp API call failed: ${e}`);
+      this.setState({
+        fetching: false
+      });
+    })
+  }
+
+  getTimestamp(){
+    let fetchURL = '/api/timestamp';
+    fetch(fetchURL)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(json => {
+        // console.log(json);
         this.setState({
-          message: `API call failed: ${e}`,
+          data: json,
           fetching: false
         });
-      })
+      }).catch(e => {
+        console.log(`Timestamp API call failed: ${e}`);
+        this.setState({
+          fetching: false
+        });
+    })
   }
 
   render() {
+    if(!this.state.data){return <p> {'LOADING'} </p>}
+    const {data} = this.state;
+    console.log(data);
+    console.log(styles);
+
+    // const {data} = this.state;
+    // console.log(data);
+    // const columns = [{
+    //   Header: 'Name',
+    //   accessor: 'name' // String-based value accessors!
+    // }, {
+    //   id: 'artistsName', // Required because our accessor is not a string
+    //   Header: 'Artists',
+    //   accessor: d => d.artists.name
+    // }];
+    //
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          {'This is '}
-          <a href="https://github.com/mars/heroku-cra-node">
-            {'create-react-app with a custom Node/Express server'}
-          </a><br/>
-        </p>
-        <p className="App-intro">
-          {this.state.fetching
-            ? 'Fetching message from API'
-            : this.state.message}
-        </p>
-      </div>
+      <Table
+        width={500}
+        height={1000}
+        rowClassName={this._rowClassName}
+        headerHeight={20}
+        rowHeight={30}
+        rowCount={data.length}
+        rowGetter={({ index }) => data[index]}
+      >
+        <Column
+          label='Name'
+          dataKey='name'
+          width={200}
+        />
+
+      </Table>
     );
   }
+
+  _rowClassName({index}) {
+    if (index < 0) {
+      return styles.headerRow;
+    } else {
+      return index % 2 === 0 ? styles.evenRow : styles.oddRow;
+    }
+  }
+
 }
 
 export default App;
