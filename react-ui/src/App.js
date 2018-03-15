@@ -15,6 +15,7 @@ class App extends Component {
     };
 
     this._rowClassName = this._rowClassName.bind(this);
+    // this._sort = this._sort.bind(this);
   }
 
   componentDidMount() {
@@ -22,6 +23,9 @@ class App extends Component {
   }
 
   getPlayedSong(){
+    /**
+    * Ajax call to get playedsong
+    * */
     let fetchURL = '/api/playedsong';
     fetch(fetchURL)
       .then(response => {
@@ -45,6 +49,9 @@ class App extends Component {
   }
 
   getTimestamp(){
+    /**
+     * Ajax call to get timestamps
+     * */
     let fetchURL = '/api/timestamp';
     fetch(fetchURL)
       .then(response => {
@@ -67,23 +74,27 @@ class App extends Component {
     })
   }
 
+  // function createArtistsName(props){
+  //   /*
+  //     Helper Function for
+  //     getUsersTopTracks
+  //    */
+  //   let artistsName = "";
+  //   if(props['artists'].length > 1) {
+  //     props['artists'].forEach((artist)=>{
+  //       artistsName += (artist.name + ', ')
+  //     });
+  //     artistsName = artistsName.replace(/,\s*$/, "");
+  //   } else {
+  //     artistsName = props.artists[0].name
+  //   }
+  //   return artistsName
+  // }
+
   render() {
     if(!this.state.data){return <p> {'LOADING'} </p>}
     const {data} = this.state;
-    console.log(data);
-    console.log(styles);
 
-    // const {data} = this.state;
-    // console.log(data);
-    // const columns = [{
-    //   Header: 'Name',
-    //   accessor: 'name' // String-based value accessors!
-    // }, {
-    //   id: 'artistsName', // Required because our accessor is not a string
-    //   Header: 'Artists',
-    //   accessor: d => d.artists.name
-    // }];
-    //
     return (
       <Table
         width={500}
@@ -95,11 +106,35 @@ class App extends Component {
         rowGetter={({ index }) => data[index]}
       >
         <Column
+          label="Index"
+          // cellDataGetter={({rowData}) => rowData.index}
+          cellRenderer={({rowIndex})=>rowIndex+1}
+          dataKey="index"
+          // disableSort={!this._isSortEnabled()}
+          width={60}
+        />
+        <Column
           label='Name'
           dataKey='name'
           width={200}
         />
-
+        <Column
+          label='Artists'
+          dataKey='artists'
+          cellDataGetter={function({rowData}){
+            let artistsName = "";
+            if(rowData['artists'].length > 1) {
+              rowData['artists'].forEach((artist)=>{
+                artistsName += (artist.name + ', ')
+              });
+              artistsName = artistsName.replace(/,\s*$/, "");
+            } else {
+              artistsName = rowData.artists[0].name
+            }
+            return artistsName
+          }}
+          width={200}
+        />
       </Table>
     );
   }
@@ -112,6 +147,7 @@ class App extends Component {
     }
   }
 
+  // _sort({})
 }
 
 export default App;
