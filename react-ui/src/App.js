@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Column, Table } from 'react-virtualized';
+import { Column, Table, AutoSizer, SortDirection } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import './css/App.css';
 import styles from './css/table.css';
@@ -9,12 +9,21 @@ import styles from './css/table.css';
 class App extends Component {
   constructor(props) {
     super(props);
+
+    const sortBy = 'index';
+    const sortDirection = SortDirection.ASC;
+    // const sortedList = this._sortList({sortBy, sortDirection});
+
     this.state = {
       data: null,
-      fetching: true
+      fetching: true,
+      sortBy: sortBy,
+      sortDirection: sortDirection,
+      // sortedList: sortedList,
     };
 
     this._rowClassName = this._rowClassName.bind(this);
+    // this._sort = this._sort.bind(this);
     // this._sort = this._sort.bind(this);
   }
 
@@ -35,7 +44,7 @@ class App extends Component {
         return response.json();
       })
       .then(json => {
-        // console.log(json);
+        console.log(json);
         this.setState({
           data: json,
           fetching: false
@@ -74,68 +83,66 @@ class App extends Component {
     })
   }
 
-  // function createArtistsName(props){
-  //   /*
-  //     Helper Function for
-  //     getUsersTopTracks
-  //    */
-  //   let artistsName = "";
-  //   if(props['artists'].length > 1) {
-  //     props['artists'].forEach((artist)=>{
-  //       artistsName += (artist.name + ', ')
-  //     });
-  //     artistsName = artistsName.replace(/,\s*$/, "");
-  //   } else {
-  //     artistsName = props.artists[0].name
-  //   }
-  //   return artistsName
-  // }
-
   render() {
     if(!this.state.data){return <p> {'LOADING'} </p>}
     const {data} = this.state;
 
     return (
-      <Table
-        width={500}
-        height={1000}
-        rowClassName={this._rowClassName}
-        headerHeight={20}
-        rowHeight={30}
-        rowCount={data.length}
-        rowGetter={({ index }) => data[index]}
-      >
-        <Column
-          label="Index"
-          // cellDataGetter={({rowData}) => rowData.index}
-          cellRenderer={({rowIndex})=>rowIndex+1}
-          dataKey="index"
-          // disableSort={!this._isSortEnabled()}
-          width={60}
-        />
-        <Column
-          label='Name'
-          dataKey='name'
-          width={200}
-        />
-        <Column
-          label='Artists'
-          dataKey='artists'
-          cellDataGetter={function({rowData}){
-            let artistsName = "";
-            if(rowData['artists'].length > 1) {
-              rowData['artists'].forEach((artist)=>{
-                artistsName += (artist.name + ', ')
-              });
-              artistsName = artistsName.replace(/,\s*$/, "");
-            } else {
-              artistsName = rowData.artists[0].name
-            }
-            return artistsName
-          }}
-          width={200}
-        />
-      </Table>
+      <AutoSizer disableHeight>
+        {({width}) => (
+          <Table
+            width={width}
+            // height={height}
+            // width={500}
+            height={500}
+            rowClassName={this._rowClassName}
+            headerHeight={20}
+            rowHeight={30}
+            rowCount={data.length}
+            rowGetter={({ index }) => data[index]}
+            sort={this._sort}
+            sortBy={this.state.sortBy}
+            sortDirection={this.state.sortDirection}
+            {...this.props}
+          >
+            <Column
+              label="Index"
+              cellRenderer={({rowIndex})=>rowIndex+1}
+              dataKey="index"
+              width={60}
+            />
+            <Column
+              label='Name'
+              dataKey='name'
+              width={200}
+            />
+            <Column
+              label='Artists'
+              dataKey='artists'
+              cellDataGetter={function({rowData}){
+                let artistsName = "";
+                if(rowData['artists'].length > 1) {
+                  rowData['artists'].forEach((artist)=>{
+                    artistsName += (artist.name + ', ')
+                  });
+                  artistsName = artistsName.replace(/,\s*$/, "");
+                } else {
+                  artistsName = rowData.artists[0].name
+                }
+                return artistsName
+              }}
+              width={200}
+            />
+            <Column
+              label={'Play Count'}
+              dataKey='timestamps'
+              cellDataGetter={function({rowData}){
+                return rowData.timestamps.length
+              }}
+              width={100}/>
+          </Table>
+        )}
+      </AutoSizer>
     );
   }
 
@@ -147,7 +154,21 @@ class App extends Component {
     }
   }
 
-  // _sort({})
+  // _sort({sortBy, sortDirection}) {
+  //   const sortedList = this._sortList({sortBy, sortDirection});
+  //
+  //   this.setState({sortBy, sortDirection, sortedList});
+  // }
+  //
+  // _sortList({sortBy, sortDirection}) {
+  //   const {list} = this.context;
+  //
+  //   return list
+  //     .sortBy(item => item[sortBy])
+  //     .update(
+  //       list => (sortDirection === SortDirection.DESC ? list.reverse() : list),
+  //     );
+  // }
 }
 
 export default App;
