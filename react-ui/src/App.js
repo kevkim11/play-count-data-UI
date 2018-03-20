@@ -1,30 +1,15 @@
 import React, { Component } from 'react';
-import { Column, Table, AutoSizer, SortDirection } from 'react-virtualized';
-import 'react-virtualized/styles.css';
 import './css/App.css';
-import styles from './css/table.css';
-
-// import ReactTable from "react-table";
+import MyTable from './components/spotifyTable.js'
 
 class App extends Component {
   constructor(props) {
     super(props);
 
-    const sortBy = 'index';
-    const sortDirection = SortDirection.ASC;
-    // const sortedList = this._sortList({sortBy, sortDirection});
-
     this.state = {
       data: null,
       fetching: true,
-      sortBy: sortBy,
-      sortDirection: sortDirection,
-      // sortedList: sortedList,
     };
-
-    this._rowClassName = this._rowClassName.bind(this);
-    // this._sort = this._sort.bind(this);
-    // this._sort = this._sort.bind(this);
   }
 
   componentDidMount() {
@@ -88,87 +73,9 @@ class App extends Component {
     const {data} = this.state;
 
     return (
-      <AutoSizer disableHeight>
-        {({width}) => (
-          <Table
-            width={width}
-            // height={height}
-            // width={500}
-            height={500}
-            rowClassName={this._rowClassName}
-            headerHeight={20}
-            rowHeight={30}
-            rowCount={data.length}
-            rowGetter={({ index }) => data[index]}
-            sort={this._sort}
-            sortBy={this.state.sortBy}
-            sortDirection={this.state.sortDirection}
-            {...this.props}
-          >
-            <Column
-              label="Index"
-              cellRenderer={({rowIndex})=>rowIndex+1}
-              dataKey="index"
-              width={60}
-            />
-            <Column
-              label='Name'
-              dataKey='name'
-              width={200}
-            />
-            <Column
-              label='Artists'
-              dataKey='artists'
-              cellDataGetter={function({rowData}){
-                let artistsName = "";
-                if(rowData['artists'].length > 1) {
-                  rowData['artists'].forEach((artist)=>{
-                    artistsName += (artist.name + ', ')
-                  });
-                  artistsName = artistsName.replace(/,\s*$/, "");
-                } else {
-                  artistsName = rowData.artists[0].name
-                }
-                return artistsName
-              }}
-              width={200}
-            />
-            <Column
-              label={'Play Count'}
-              dataKey='timestamps'
-              cellDataGetter={function({rowData}){
-                return rowData.timestamps.length
-              }}
-              width={100}/>
-          </Table>
-        )}
-      </AutoSizer>
+      <MyTable data={data} parentMethod={this.getPlayedSong}/>
     );
   }
-
-  _rowClassName({index}) {
-    if (index < 0) {
-      return styles.headerRow;
-    } else {
-      return index % 2 === 0 ? styles.evenRow : styles.oddRow;
-    }
-  }
-
-  // _sort({sortBy, sortDirection}) {
-  //   const sortedList = this._sortList({sortBy, sortDirection});
-  //
-  //   this.setState({sortBy, sortDirection, sortedList});
-  // }
-  //
-  // _sortList({sortBy, sortDirection}) {
-  //   const {list} = this.context;
-  //
-  //   return list
-  //     .sortBy(item => item[sortBy])
-  //     .update(
-  //       list => (sortDirection === SortDirection.DESC ? list.reverse() : list),
-  //     );
-  // }
 }
 
 export default App;

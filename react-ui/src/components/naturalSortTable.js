@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import { Column, Table, AutoSizer } from 'react-virtualized';
 
 
