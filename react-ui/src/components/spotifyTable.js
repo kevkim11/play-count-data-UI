@@ -1,26 +1,32 @@
 import React, { Component } from 'react';
 import { Column, Table, AutoSizer, SortDirection, createTableMultiSort, SortIndicator } from 'react-virtualized';
+import Immutable from 'immutable'
+import PropTypes from 'prop-types';
 import 'react-virtualized/styles.css';
 import styles from '../css/table.css';
 
 class MyTable extends Component {
 
-  constructor(props){
-    super(props);
+  static contextTypes = {
+    list: PropTypes.instanceOf(Immutable.list)
+  };
 
-    // const sortBy = null;
-    // const sortDirection = null;
+  constructor(props, context){
+    super(props, context);
+
+    // const sortBy = 'name';
+    // const sortDirection = SortDirection.ASC;
+    // const sortedList = this._sortList({sortBy, sortDirection});
 
     const sortBy = null;
     const sortDirection = null;
-
-    // const sortedList = this._sortList({sortBy, sortDirection});
+    const sortedList = [];
 
     this.state = {
       sortBy: sortBy,
       sortDirection: sortDirection,
-      list: this.props.data
-      // sortedList:
+      sortedList: sortedList
+      // list: props.list
     };
 
     this._rowClassName = this._rowClassName.bind(this);
@@ -29,8 +35,11 @@ class MyTable extends Component {
   }
 
   render(){
-    const { sortBy, sortDirection } = this.state;
-
+    const { sortBy, sortDirection, sortedList} = this.state;
+    // console.log('sortBy IS::');
+    // console.log(sortBy);
+    console.log('sortDirection IS::');
+    console.log(sortDirection);
     return (
       <AutoSizer disableHeight>
         {({width}) => (
@@ -42,8 +51,8 @@ class MyTable extends Component {
             rowClassName={this._rowClassName}
             headerHeight={20}
             rowHeight={30}
-            rowCount={this.state.list.length}
-            rowGetter={({ index }) => this.state.list[index]}
+            rowCount={this.context.list.length}
+            rowGetter={({ index }) => this.context.list[index]}
             sort={this._sort}
             sortBy={sortBy}
             sortDirection={sortDirection}
@@ -91,58 +100,63 @@ class MyTable extends Component {
     );
   }
 
-  _sort({ sortBy, sortDirection }){
-    // console.log(`inside _sort, state is:`);
-    // console.log(this.state);
+  _sort ({ sortBy, sortDirection }) {
     const {
       sortBy: prevSortBy,
       sortDirection: prevSortDirection,
-      list: prevList
+      // sortedList: prevSortedList
     } = this.state;
-    console.log(`prevSortDirection is`);
-    console.log(prevSortDirection);
-    let sortedList;
-    if (prevSortDirection === SortDirection.DESC) {
-      //
-      sortDirection = null;
-      sortBy = 'name';
-      sortedList = this.props.data;
-    } else if(prevSortDirection === SortDirection.ASC){
-      sortDirection = SortDirection.DESC;
-      sortBy = 'name';
-      sortedList = prevList.sort(function(a, b){
-        let nameA = a.name.toUpperCase(); // ignore upper and lowercase
-        let nameB = b.name.toUpperCase();
-        if (nameA < nameB) {
-          return 1;
-        }
-        if (nameA > nameB) {
-          return -1;
-        }
-        // names must be equal
-        return 0;
-      });
-    } else {
-      // Null
-      sortDirection = SortDirection.ASC;
-      sortBy = 'name';
-      sortedList = prevList.sort(function(a, b){
-        let nameA = a.name.toUpperCase(); // ignore upper and lowercase
-        let nameB = b.name.toUpperCase();
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-        // names must be equal
-        return 0;
-      });
 
+    let list = this.context.list;
+
+    let sortedList;
+    // If list was sorted DESC by this column.
+    // Rather than switch to ASC, return to "natural" order.
+    if (prevSortDirection === SortDirection.ASC){
+      //ASC -> DESC
+      // sortBy = sortBy;
+      sortDirection = SortDirection.DESC;
+      sortedList = list.sort(function(a, b){
+        let nameA = a.name.toUpperCase(); // ignore upper and lowercase
+        let nameB = b.name.toUpperCase();
+        if (nameA < nameB) {
+          return 1;
+        }
+        if (nameA > nameB) {
+          return -1;
+        }
+        // names must be equal
+        return 0;
+      })
     }
-    console.log(sortedList);
-    this.setState({ sortBy, sortDirection, list: sortedList })
+
+    if (prevSortDirection === SortDirection.DESC) {
+      //DESC -> null
+      sortBy = null;
+      sortDirection = null;
+      sortedList = list
+    }
+
+    if (prevSortDirection === null) {
+      // null -> ASC
+      sortDirection = SortDirection.ASC;
+      sortedList = list.sort(function(a, b){
+        let nameA = a.name.toUpperCase(); // ignore upper and lowercase
+        let nameB = b.name.toUpperCase();
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        // names must be equal
+        return 0;
+      })
+    }
+
+    this.setState({ sortBy, sortDirection, sortedList})
   }
+
 
   _headerRenderer({dataKey, sortBy, sortDirection}) {
     return (
