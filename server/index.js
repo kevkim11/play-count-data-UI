@@ -7,7 +7,6 @@ const PORT = process.env.PORT || 5000;
 
 const MongoClient = require('mongodb').MongoClient;
 const mongoURI = process.env.MONGOURI;
-// const mongoURI = "mongodb+srv://playcount-ui:zM34Keoa1cY33j4o@spotifyplaycountcluster-oqdcv.mongodb.net/test";
 // Multi-process to utilize all CPU cores.
 if (cluster.isMaster) {
   console.log(`Node cluster master ${process.pid} is running`);
