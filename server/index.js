@@ -6,8 +6,7 @@ const numCPUs = require('os').cpus().length;
 const PORT = process.env.PORT || 5000;
 
 const MongoClient = require('mongodb').MongoClient;
-
-
+const mongoURI = process.env.MONGOURI;
 // Multi-process to utilize all CPU cores.
 if (cluster.isMaster) {
   console.log(`Node cluster master ${process.pid} is running`);

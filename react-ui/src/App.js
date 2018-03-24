@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Immutable from 'immutable'
+// import PropTypes from 'prop-types';
+// import Immutable from 'immutable'
 import 'react-virtualized/styles.css';
 import './css/App.css';
 import MyTable from './components/spotifyTable.js'
 
 class App extends Component {
-  static childContextTypes = {
-    list: PropTypes.instanceOf(Immutable.list)
-  };
+  // static childContextTypes = {
+  //   list: PropTypes.instanceOf(Immutable.list)
+  // };
 
-  getChildContext(){
-    return {list: this.state.data};
-  }
+  // getChildContext(){
+  //   return {list: this.state.data};
+  // }
 
   constructor(props) {
     super(props);
@@ -91,8 +91,8 @@ class App extends Component {
   }
 }
 
-App.childContextTypes = {
-  list: PropTypes.instanceOf(Immutable.list)
-};
+// App.childContextTypes = {
+//   list: PropTypes.instanceOf(Immutable.list)
+// };
 
 export default App;

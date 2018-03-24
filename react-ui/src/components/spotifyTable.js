@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { Column, Table, AutoSizer, SortDirection, createTableMultiSort, SortIndicator } from 'react-virtualized';
-import Immutable from 'immutable'
-import PropTypes from 'prop-types';
+// import Immutable from 'immutable'
+// import PropTypes from 'prop-types';
 import 'react-virtualized/styles.css';
 import styles from '../css/table.css';
 
 class MyTable extends Component {
 
-  static contextTypes = {
-    list: PropTypes.instanceOf(Immutable.list)
-  };
+  // static contextTypes = {
+  //   list: PropTypes.instanceOf(Immutable.list)
+  // };
 
   constructor(props, context){
     super(props, context);
@@ -51,8 +51,8 @@ class MyTable extends Component {
             rowClassName={this._rowClassName}
             headerHeight={20}
             rowHeight={30}
-            rowCount={this.context.list.length}
-            rowGetter={({ index }) => this.context.list[index]}
+            rowCount={this.props.list.length}
+            rowGetter={({ index }) => this.props.list[index]}
             sort={this._sort}
             sortBy={sortBy}
             sortDirection={sortDirection}
