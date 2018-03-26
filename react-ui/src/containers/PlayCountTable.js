@@ -70,5 +70,5 @@ export default class PlayCountTable extends Component {
 
 PlayCountTable.propTypes = {
   data: PropTypes.array.isRequired
-}
+};
 
