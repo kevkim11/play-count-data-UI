@@ -2,15 +2,16 @@ import {
   SET_SORT_FILTER,
   SortFilters
 } from '../actions'
+// const { UNSORTED } = SET_SORT_FILTER;
 
 const initialState = {
   sortFilter: SortFilters.UNSORTED,
-  data: [] // null
+  isFetching: true, //bool
+  didInvalidate: false,
+  data: [], // items
 };
-
-const { UNSORTED } = SET_SORT_FILTER;
-
-function sortFilter(state = UNSORTED, action) {
+/** Sort Reducers*/
+function sortFilter(state = SortFilters.UNSORTED, action) {
   switch (action.type) {
     case SET_SORT_FILTER:
       return action.filter;
@@ -30,6 +31,9 @@ function sortTable(state=initialState, action) {
       return state
   }
 }
+/** API Reducers*/
+
+// function recentlyPlayedSongs
 
 export default function reducer(state={}, action){
   /**

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PlayCountTable from '../containers/PlayCountTable.js'
 import '../css/App.css';
+import fetch from 'cross-fetch'
 
 class App extends Component {
 

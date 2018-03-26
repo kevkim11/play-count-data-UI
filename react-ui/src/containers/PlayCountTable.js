@@ -31,10 +31,10 @@ class PlayCountTable extends Component {
     const tableHead = (
       <thead>
       <tr>
-        <th>index</th>
-        <th>Name</th>
-        <th>Artists</th>
-        <th>Play Count</th>
+        <th onClick={null}>index</th>
+        <th onClick={null}>Name</th>
+        <th onClick={null}>Artists</th>
+        <th onClick={null}>Play Count</th>
       </tr>
       </thead>
     );
@@ -45,7 +45,7 @@ class PlayCountTable extends Component {
       let playCount = createPlayCount(item);
 
       return (
-        <tr key={songName} id={i}>
+        <tr key={i} id={i}>
           <td>{i+1}</td>
           <td>{songName}</td>
           <td>{artistsName}</td>
