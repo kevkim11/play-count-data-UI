@@ -48,8 +48,8 @@ export function fetchPlayedSongs(){
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
-  return function (dispatch) {
-    dispatch(requestPlayedSongs())
+  return  (dispatch) => {
+    dispatch(requestPlayedSongs());
     // The function called by the thunk middleware can return a value,
     // that is passed on as the return value of the dispatch method.
 
@@ -57,33 +57,35 @@ export function fetchPlayedSongs(){
     // This is not required by thunk middleware, but it is convenient for us.
     let fetchURL = '/api/playedsong';
     return fetch(fetchURL)
-      .then(response => response.json(),
-            error => console.log('an error has occured', error)
-      ).then(json=> dispatch(receivedPlayedSongs(json)))
+      .then(response => response.json())
+      // .catch(e =>{console.log(`Timestamp API call failed: ${e}`)}) // TODO Need to do proper error handling
+      .then(json=> dispatch(receivedPlayedSongs(json)))
   }
 }
-// getPlayedSong(){
-//   /**
-//    * Ajax call to get playedsong
-//    * */
-//   let fetchURL = '/api/playedsong';
-//   fetch(fetchURL)
-//     .then(response => {
-//       if (!response.ok) {
-//         throw new Error(`status ${response.status}`);
-//       }
-//       return response.json();
-//     })
-//     .then(json => {
-//       console.log(json);
-//       this.setState({
-//         data: json,
-//         fetching: false
-//       });
-//     }).catch(e => {
-//     console.log(`Timestamp API call failed: ${e}`);
-//     this.setState({
-//       fetching: false
-//     });
-//   })
-// }
+
+function shouldFetchPlayedSongs(state){
+  const items = state.data
+  if(!items) {
+    return true
+  } else if(state.isFetching){
+    return false
+  } else {
+    return state.didInvalidate
+  }
+}
+
+export function fetchPlayedSongIfNeeded(){
+  // Note that the function also receives getState()
+  // which lets you choose what to dispatch next.
+
+  // This is useful for avoiding a network request if
+  // a cached value is already available.
+  return (dispatch, getState) => {
+    if(shouldFetchPlayedSongs(getState())){
+      return dispatch(fetchPlayedSongs())
+    } else {
+      // Let the calling code know there's nothing to wait for.
+      return Promise.resolve();
+    }
+  }
+}

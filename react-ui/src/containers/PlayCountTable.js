@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import { Table } from 'react-bootstrap';
 
 /** Utility Functions*/
@@ -25,9 +26,10 @@ function createPlayCount(item) {
   return item.timestamps.length
 }
 
-class PlayCountTable extends Component {
+export default class PlayCountTable extends Component {
 
   render() {
+    // TODO Going to need to make the tableHead it's own component for sorting functionality
     const tableHead = (
       <thead>
       <tr>
@@ -66,5 +68,7 @@ class PlayCountTable extends Component {
   }
 }
 
-export default PlayCountTable;
+PlayCountTable.propTypes = {
+  data: PropTypes.array.isRequired
+}
 

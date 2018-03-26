@@ -6,7 +6,7 @@ import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import App from './components/App';
 import reducer from './reducers'
-import { fetchPlayedSongs } from './actions'
+import { fetchPlayedSongs, fetchPlayedSongIfNeeded } from './actions'
 import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 
@@ -20,9 +20,9 @@ const store = createStore(
   )
 );
 
-// store
-//   .dispatch(fetchPlayedSongs())
-//   .then(()=>console.log(store.getState()));
+store
+  .dispatch(fetchPlayedSongIfNeeded())
+  .then(()=>console.log(store.getState()));
 
 ReactDOM.render(
   <Provider store={store}>

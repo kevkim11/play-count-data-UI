@@ -15,6 +15,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // const { dispatch } = this.props
     this.getPlayedSong()
   }
 
