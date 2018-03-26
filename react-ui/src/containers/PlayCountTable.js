@@ -45,7 +45,7 @@ class PlayCountTable extends Component {
       let playCount = createPlayCount(item);
 
       return (
-        <tr key={i}>
+        <tr key={songName} id={i}>
           <td>{i+1}</td>
           <td>{songName}</td>
           <td>{artistsName}</td>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import PlayCountTable from './containers/PlayCountTable.js'
-import './css/App.css';
+import PlayCountTable from '../containers/PlayCountTable.js'
+import '../css/App.css';
 
 class App extends Component {
 
@@ -74,7 +74,9 @@ class App extends Component {
     const {data} = this.state;
 
     return (
+      <div className={'container'}>
       <PlayCountTable data={data}/>
+      </div>
     );
   }
 }
