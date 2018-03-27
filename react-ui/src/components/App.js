@@ -14,19 +14,20 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-
   }
 
   componentDidMount() {
     const { dispatch } = this.props;
+    console.log('dispatch is: ', this.props);
     // Initial fetch call when component did mount
     dispatch(fetchPlayedSongIfNeeded())
+    console.log('dispatch is 2: ', this.props);
   }
 
   render() {
     // if(!this.state.data){return <p> {'LOADING'} </p>}
     // const {data} = this.state;
-    console.log(this.props);
+    console.log('INSIDE RENDER OF APP',this.props);
     const {data, isFetching} = this.props;
     console.log('isFetching',isFetching);
     console.log('data',data);
@@ -46,27 +47,16 @@ App.propTypes = {
   dispatch: PropTypes.func.isRequired
 };
 
-function mapStateToProps(state) {
-  /**
-   * Takes in a state -> props
-   * */
-  console.log('mapStateToProps',state);
-  const {
-    // sortFilter,
-    isFetching,
-    didInvalidate,
-    data, // items
-    lastUpdated
-  } = state;
-  console.log('THIS STATE IS!!!!', state)
-  return {
-    didInvalidate: didInvalidate || false,
-    data: data || [],
-    isFetching: isFetching || false,
-    lastUpdated
-  }
+/**
+ * state = redux state
+ * const mapStateToProps = (state) => ({})
+ */
+function mapStateToProps(state){
+  // Get the reducer from the state
+  const { recentlyPlayedSongs } = state
+  const {data, isFetching, dispatch} = recentlyPlayedSongs;
+  return({data, isFetching, dispatch})
 }
 
 export default connect(mapStateToProps)(App)
 
-// export default App;

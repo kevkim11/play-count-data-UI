@@ -8,13 +8,6 @@ import {
 } from '../actions'
 // const { UNSORTED } = SET_SORT_FILTER;
 
-const initialState = {
-  sortFilter: SortFilters.UNSORTED,
-  isFetching: false, //bool
-  didInvalidate: false,
-  data: [], // items
-  lastUpdated: null
-};
 /** Sort Reducers*/
 function sortFilter(state = SortFilters.UNSORTED, action) {
   switch (action.type) {
@@ -38,7 +31,16 @@ function sortTable(state=initialState, action) {
 }
 /** API Reducers*/
 
+const initialState = {
+  sortFilter: SortFilters.UNSORTED,
+  isFetching: false, //bool
+  didInvalidate: false,
+  data: [], // items
+  lastUpdated: null
+};
+
 function recentlyPlayedSongs(state=initialState, action) {
+  // console.log('recentlyPlayedSongs reducer:', state, action);
   switch (action.type){
     case REQUEST_PLAYEDSONGS:
       return Object.assign({}, state, {isFetching: true, didInvalidate: false});

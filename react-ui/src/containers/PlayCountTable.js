@@ -29,6 +29,7 @@ function createPlayCount(item) {
 export default class PlayCountTable extends Component {
 
   render() {
+    console.log('playCountTable Props are', this.props);
     /* TODO Going to need to make the tableHead it's own component for sorting functionality
      * i.e. Component Picker https://github.com/reactjs/redux/blob/master/docs/advanced/ExampleRedditAPI.md
      * Will Need to move tableHead/sort to Components instead of container
