@@ -28,7 +28,7 @@ function requestPlayedSongs(){
 function receivedPlayedSongs(json){
   return {
     type: RECEIVED_PLAYEDSONGS,
-    playedSongs: json.data.children.map(child => child.data),
+    playedSongs: json,
     receivedAt: Date.now()
   }
 }
@@ -41,7 +41,7 @@ export function invalidatePlayedSongs() {
   }
 }
 
-// Meet our first thunk action creator!
+/** THUNK action creator!*/
 // Though its insides are different, you would use it just like any other action creator:
 // store.dispatch(fetchPosts('reactjs'))
 export function fetchPlayedSongs(){
@@ -59,12 +59,18 @@ export function fetchPlayedSongs(){
     return fetch(fetchURL)
       .then(response => response.json())
       // .catch(e =>{console.log(`Timestamp API call failed: ${e}`)}) // TODO Need to do proper error handling
-      .then(json=> dispatch(receivedPlayedSongs(json)))
+      .then(json=> {
+        console.log(json);
+        dispatch(receivedPlayedSongs(json)
+      )})
   }
 }
 
 function shouldFetchPlayedSongs(state){
-  const items = state.data
+  const items = state.data;
+  console.log('state:', state);
+  console.log('items:', items);
+  console.log('state.isFetching:', state.isFetching);
   if(!items) {
     return true
   } else if(state.isFetching){
@@ -81,6 +87,7 @@ export function fetchPlayedSongIfNeeded(){
   // This is useful for avoiding a network request if
   // a cached value is already available.
   return (dispatch, getState) => {
+    console.log('getstate',getState());
     if(shouldFetchPlayedSongs(getState())){
       return dispatch(fetchPlayedSongs())
     } else {

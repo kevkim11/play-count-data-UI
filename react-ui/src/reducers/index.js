@@ -1,14 +1,19 @@
+import { combineReducers } from 'redux'
 import {
   SET_SORT_FILTER,
-  SortFilters
+  SortFilters,
+  REQUEST_PLAYEDSONGS,
+  RECEIVED_PLAYEDSONGS,
+  INVALIDATE_PLAYEDSONGS
 } from '../actions'
 // const { UNSORTED } = SET_SORT_FILTER;
 
 const initialState = {
   sortFilter: SortFilters.UNSORTED,
-  isFetching: true, //bool
+  isFetching: false, //bool
   didInvalidate: false,
   data: [], // items
+  lastUpdated: null
 };
 /** Sort Reducers*/
 function sortFilter(state = SortFilters.UNSORTED, action) {
@@ -33,15 +38,26 @@ function sortTable(state=initialState, action) {
 }
 /** API Reducers*/
 
-// function recentlyPlayedSongs
-
-export default function reducer(state={}, action){
-  /**
-   * MAIN REDUCER
-   Note that each of these reducers is managing its own part of the global state.
-   The state parameter is different for every reducer, and corresponds to the part of the state it manages.
-   */
-  return {
-    sortFilter: sortFilter(state.sortFilter, action)
+function recentlyPlayedSongs(state=initialState, action) {
+  switch (action.type){
+    case REQUEST_PLAYEDSONGS:
+      return Object.assign({}, state, {isFetching: true, didInvalidate: false});
+    case RECEIVED_PLAYEDSONGS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false,
+        data: action.playedSongs,
+        lastUpdated: action.receivedAt
+      });
+    case INVALIDATE_PLAYEDSONGS:
+      return Object.assign({}, state, {didInvalidate: true});
+    default:
+      return state
   }
 }
+
+let rootReducer = combineReducers({
+  recentlyPlayedSongs
+})
+
+export default  rootReducer
