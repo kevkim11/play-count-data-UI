@@ -56,6 +56,13 @@ class PlayCountTable extends Component {
           return 0
         });
       }
+      if(sortBy===SortBys.playCount){
+        newSortedList = data.slice().sort(function(a, b){
+          if(a.timestamps.length < b.timestamps.length) return -1;
+          if(a.timestamps.length > b.timestamps.length) return 1;
+          return 0
+        });
+      }
     } else if(sortFilter===SortFilters.DESC){
       if(sortBy===SortBys.name){
         newSortedList = data.slice().sort(function(a, b){
@@ -68,6 +75,13 @@ class PlayCountTable extends Component {
         newSortedList = data.slice().sort(function(a, b){
           if(a[sortBy][0].name < b[sortBy][0].name) return 1;
           if(a[sortBy][0].name > b[sortBy][0].name) return -1;
+          return 0
+        });
+      }
+      if(sortBy===SortBys.playCount){
+        newSortedList = data.slice().sort(function(a, b){
+          if(a.timestamps.length < b.timestamps.length) return 1;
+          if(a.timestamps.length > b.timestamps.length) return -1;
           return 0
         });
       }
@@ -109,6 +123,7 @@ class PlayCountTable extends Component {
         <th onClick={null}>index</th>
         <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'name'}>Name</th>
         <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'artists'}>Artist</th>
+        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'playCount'}>Play Count</th>
       </tr>
       </thead>
     );
