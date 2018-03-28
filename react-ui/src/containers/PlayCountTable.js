@@ -39,22 +39,35 @@ class PlayCountTable extends Component {
      * */
     const {data, sortFilter} = this.props;
     let newSortedList = Object.assign({}, data);
-    if(sortFilter==='ASC'){
+    if(sortFilter===SortFilters.ASC){
       newSortedList = data.slice().sort(function(a, b){
         if(a.name < b.name) return 1;
         if(a.name > b.name) return -1;
         return 0
       });
-    } else if(sortFilter==='DESC'){
+    } else if(sortFilter===SortFilters.DESC){
       newSortedList = data.slice().sort(function(a, b){
         if(a.name < b.name) return -1;
         if(a.name > b.name) return 1;
         return 0
       });
-    } else if(sortFilter==='UNSORTED') {
+    } else if(sortFilter===SortFilters.UNSORTED) {
       return data
     }
     return newSortedList
+  }
+
+  changeSortDirection(){
+    const {sortFilter} = this.props;
+
+    switch (sortFilter){
+      case SortFilters.ASC:
+        return "DESC";
+      case SortFilters.DESC:
+        return "UNSORTED";
+      case SortFilters.UNSORTED:
+        return "ASC";
+    }
   }
 
   render() {
@@ -68,8 +81,11 @@ class PlayCountTable extends Component {
       <thead>
       <tr>
         <th onClick={null}>index</th>
-        <th onClick={()=>dispatch(setSortFilter(SortFilters.ASC))}>Name</th>
-        <th onClick={null}>Artists</th>
+        <th onClick={()=>dispatch(setSortFilter(this.changeSortDirection()))}>Name</th>
+        <th id={'Artists'} onClick={function(e){
+          console.log('ONCLICK e is', e);
+          dispatch(setSortFilter(SortFilters.DESC))
+        }}>Artists</th>
         <th onClick={null}>Play Count</th>
       </tr>
       </thead>

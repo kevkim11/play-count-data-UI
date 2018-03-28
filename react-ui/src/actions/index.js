@@ -18,10 +18,6 @@ export function setSortFilter(filter) {
   return { type: SET_SORT_FILTER, filter }
 }
 
-export function sortByArtist() {
-  return (dispatch) => {}
-}
-
 /** API Call Action Creator*/
 // 1) An action informing the reducers that the request began.
 function requestPlayedSongs(){
