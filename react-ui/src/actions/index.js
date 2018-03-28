@@ -8,15 +8,18 @@ export const SortFilters = {
   DESC: 'DESC',
   UNSORTED: 'UNSORTED'
 };
-
 // API
 export const REQUEST_PLAYEDSONGS = 'REQUEST_PLAYEDSONGS';
 export const RECEIVED_PLAYEDSONGS = 'RECEIVED_PLAYEDSONGS';
 export const INVALIDATE_PLAYEDSONGS = 'INVALIDATE_PLAYEDSONGS'
 
-//Sort Table Action Creators
+/** Sort Table Action Creator*/
 export function setSortFilter(filter) {
   return { type: SET_SORT_FILTER, filter }
+}
+
+export function sortByArtist() {
+  return (dispatch) => {}
 }
 
 /** API Call Action Creator*/
@@ -68,9 +71,6 @@ export function fetchPlayedSongs(){
 
 function shouldFetchPlayedSongs(state){
   const items = state.data;
-  console.log('state:', state);
-  console.log('items:', items);
-  console.log('state.isFetching:', state.isFetching);
   if(!items) {
     return true
   } else if(state.isFetching){

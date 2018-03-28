@@ -19,7 +19,7 @@ const store = createStore(
     loggerMiddleware // neat middleware that logs actions
   )
 );
-
+console.log(store.getState());
 ReactDOM.render(
   <Provider store={store}>
     <App />
