@@ -8,6 +8,11 @@ export const SortFilters = {
   DESC: 'DESC',
   UNSORTED: 'UNSORTED'
 };
+export const SortBys = {
+  name: 'name',
+  artists: 'artists',
+  playCount: 'playCount'
+};
 // API
 export const REQUEST_PLAYEDSONGS = 'REQUEST_PLAYEDSONGS';
 export const RECEIVED_PLAYEDSONGS = 'RECEIVED_PLAYEDSONGS';
@@ -15,6 +20,7 @@ export const INVALIDATE_PLAYEDSONGS = 'INVALIDATE_PLAYEDSONGS'
 
 /** Sort Table Action Creator*/
 export function setSortFilter(filter) {
+  // Start Here.
   return { type: SET_SORT_FILTER, filter }
 }
 

@@ -19,14 +19,14 @@ class App extends Component {
 
   render() {
     console.log('INSIDE RENDER OF APP',this.props);
-    const {data, isFetching, sortFilter, dispatch} = this.props;
+    const {data, isFetching, sortFilter, sortBy} = this.props;
     console.log('isFetching',isFetching);
     console.log('data',data);
     if(isFetching && !data){return <p> {'LOADING'} </p>}
     if(!isFetching && !data){return <p> {'EMPTY'} </p>}
     return (
       <div className={'container'}>
-        <PlayCountTable data={data} sortFilter={sortFilter}/>
+        <PlayCountTable data={data} sortFilter={sortFilter} sortBy={sortBy}/>
       </div>
     );
   }
@@ -44,8 +44,8 @@ App.propTypes = {
  */
 function mapStateToProps(state){
   const { recentlyPlayedSongs } = state;
-  const {data, isFetching, dispatch, sortFilter} = recentlyPlayedSongs;
-  return({data, isFetching, dispatch, sortFilter})
+  const {data, isFetching, dispatch, sortFilter, sortBy} = recentlyPlayedSongs;
+  return({data, isFetching, dispatch, sortFilter, sortBy})
 }
 
 export default connect(mapStateToProps)(App)

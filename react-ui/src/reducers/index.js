@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import {
   SET_SORT_FILTER,
   SortFilters,
+  SortBys,
   REQUEST_PLAYEDSONGS,
   RECEIVED_PLAYEDSONGS,
   INVALIDATE_PLAYEDSONGS
@@ -10,6 +11,7 @@ import {
 
 const initialState = {
   sortFilter: SortFilters.UNSORTED,
+  sortBy: SortBys.name,
   data: [], // items
   isFetching: false, //bool
   didInvalidate: false,
@@ -46,7 +48,8 @@ function recentlyPlayedSongs(state=initialState, action) {
       return Object.assign({}, state, {didInvalidate: true});
     case SET_SORT_FILTER:
       return Object.assign({}, state, {
-        sortFilter: action.filter,
+        sortFilter: action.filter.sortFilter,
+        sortBy: action.filter.sortBy,
         data: state.data
       });
     default:

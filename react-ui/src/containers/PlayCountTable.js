@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { Table } from 'react-bootstrap';
 import {connect} from "react-redux";
-import {setSortFilter, SortFilters} from '../actions'
+import {setSortFilter, SortBys, SortFilters} from '../actions'
 
 /** Utility Functions*/
 function createArtistsName(item){
@@ -37,36 +37,62 @@ class PlayCountTable extends Component {
     /**
      * Sort's Data based on the filter props
      * */
-    const {data, sortFilter} = this.props;
+    const {data, sortFilter, sortBy} = this.props;
+    console.log('data is', data);
+    console.log('this.props.sortFilter is', sortFilter);
     let newSortedList = Object.assign({}, data);
     if(sortFilter===SortFilters.ASC){
-      newSortedList = data.slice().sort(function(a, b){
-        if(a.name < b.name) return 1;
-        if(a.name > b.name) return -1;
-        return 0
-      });
+      if(sortBy===SortBys.name){
+        newSortedList = data.slice().sort(function(a, b){
+          if(a[sortBy] < b[sortBy]) return -1;
+          if(a[sortBy] > b[sortBy]) return 1;
+          return 0
+        });
+      }
+      if(sortBy===SortBys.artists){
+        newSortedList = data.slice().sort(function(a, b){
+          if(a[sortBy][0].name < b[sortBy][0].name) return -1;
+          if(a[sortBy][0].name > b[sortBy][0].name) return 1;
+          return 0
+        });
+      }
     } else if(sortFilter===SortFilters.DESC){
-      newSortedList = data.slice().sort(function(a, b){
-        if(a.name < b.name) return -1;
-        if(a.name > b.name) return 1;
-        return 0
-      });
+      if(sortBy===SortBys.name){
+        newSortedList = data.slice().sort(function(a, b){
+          if(a[sortBy] < b[sortBy]) return 1;
+          if(a[sortBy] > b[sortBy]) return -1;
+          return 0
+        });
+      }
+      if(sortBy===SortBys.artists){
+        newSortedList = data.slice().sort(function(a, b){
+          if(a[sortBy][0].name < b[sortBy][0].name) return 1;
+          if(a[sortBy][0].name > b[sortBy][0].name) return -1;
+          return 0
+        });
+      }
     } else if(sortFilter===SortFilters.UNSORTED) {
       return data
     }
     return newSortedList
   }
 
-  changeSortDirection(){
-    const {sortFilter} = this.props;
+  changeSortDirection(newSortBy){
+    const {sortFilter, sortBy} = this.props;
+    console.log('sortBy is', sortBy);
+    console.log('this.props.sortFilter is', sortFilter);
+    console.log('newSortBy is', newSortBy);
 
+    if(newSortBy!==sortBy) {
+      return {sortFilter: SortFilters.UNSORTED, sortBy: newSortBy}
+    }
     switch (sortFilter){
       case SortFilters.ASC:
-        return "DESC";
+        return {sortFilter: SortFilters.DESC, sortBy:newSortBy};
       case SortFilters.DESC:
-        return "UNSORTED";
+        return {sortFilter: SortFilters.UNSORTED, sortBy:newSortBy};
       case SortFilters.UNSORTED:
-        return "ASC";
+        return {sortFilter: SortFilters.ASC, sortBy:newSortBy};
     }
   }
 
@@ -76,17 +102,13 @@ class PlayCountTable extends Component {
      * i.e. Component Picker https://github.com/reactjs/redux/blob/master/docs/advanced/ExampleRedditAPI.md
      * Will Need to move tableHead/sort to Components instead of container
     */
-    const {dispatch} = this.props;
+    const {dispatch, sortBy} = this.props;
     const tableHead = (
       <thead>
       <tr>
         <th onClick={null}>index</th>
-        <th onClick={()=>dispatch(setSortFilter(this.changeSortDirection()))}>Name</th>
-        <th id={'Artists'} onClick={function(e){
-          console.log('ONCLICK e is', e);
-          dispatch(setSortFilter(SortFilters.DESC))
-        }}>Artists</th>
-        <th onClick={null}>Play Count</th>
+        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'name'}>Name</th>
+        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'artists'}>Artist</th>
       </tr>
       </thead>
     );
@@ -118,14 +140,15 @@ class PlayCountTable extends Component {
 
 PlayCountTable.propTypes = {
   data: PropTypes.array.isRequired,
-  sortFilter: PropTypes.string.isRequired
+  sortFilter: PropTypes.string.isRequired,
+  sortBy: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state){
   // Get the reducer from the state
   const { recentlyPlayedSongs } = state;
-  const {data, sortFilter, dispatch} = recentlyPlayedSongs;
-  return({data, sortFilter, dispatch})
+  const {data, sortFilter, sortBy, dispatch} = recentlyPlayedSongs;
+  return({data, sortFilter,sortBy, dispatch})
 }
 // export default PlayCountTable
 export default connect(mapStateToProps)(PlayCountTable)
