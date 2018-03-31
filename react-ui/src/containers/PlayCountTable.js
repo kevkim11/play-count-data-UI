@@ -28,6 +28,23 @@ function createPlayCount(item) {
   return item.timestamps.length
 }
 
+function createLastPlayedString(item) {
+  return item.timestamps[item.timestamps.length-1]
+}
+
+function createLastPlayedDateObj(item){
+  return new Date(createLastPlayedString(item))
+}
+
+function reformatDateStr(item){
+  const dt = createLastPlayedDateObj(item);
+  let min = dt.getMinutes(); min = min<10 ? '0'+min : min;
+  let ampm = "am";
+  let hr = dt.getHours();
+  if(hr>12){hr -= 12; ampm="pm";}
+  return `${dt.getMonth( ) + 1}/${dt.getDate()}/${dt.getFullYear()}, ${hr}:${min} ${ampm}`
+}
+
 class PlayCountTable extends Component {
   constructor(props){
     super(props)
@@ -50,6 +67,12 @@ class PlayCountTable extends Component {
             if(a.timestamps.length > b.timestamps.length) return 1;
             return 0
           });
+      } else if(sortBy===SortBys.lastPlayed){
+        newSortedList = data.slice().sort(function(a, b){
+          a = createLastPlayedDateObj(a);
+          b = createLastPlayedDateObj(b);
+          return a - b
+        });
       } else {
         newSortedList = data.slice().sort(function(a, b){
           if(a[sortBy] < b[sortBy]) return -1;
@@ -63,6 +86,13 @@ class PlayCountTable extends Component {
           if(a.timestamps.length < b.timestamps.length) return 1;
           if(a.timestamps.length > b.timestamps.length) return -1;
           return 0
+        });
+      }
+      else if(sortBy===SortBys.lastPlayed) {
+        newSortedList = data.slice().sort(function (a, b) {
+          a = createLastPlayedDateObj(a);
+          b = createLastPlayedDateObj(b);
+          return b - a
         });
       }
       else{
@@ -84,7 +114,7 @@ class PlayCountTable extends Component {
     console.log('this.props.sortFilter is', sortFilter);
     console.log('newSortBy is', newSortBy);
 
-    if(newSortBy!==sortBy) {
+    if(newSortBy!==sortBy) { // Defaults to ASC
       return {sortFilter: SortFilters.ASC, sortBy: newSortBy}
     }
     switch (sortFilter){
@@ -122,8 +152,8 @@ class PlayCountTable extends Component {
         <th id={'index'}>index</th>
         <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'name'}>Name {this.props.sortBy==='name' ? this.showSortDirection() : null}</th>
         <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'artists'}>Artist{this.props.sortBy==='artists' ? this.showSortDirection() : null}</th>
-        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'playCount'}>Play_Count{this.props.sortBy==='playCount' ? this.showSortDirection() : null}</th>
-        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'recentlyPlayed'}>Recently Played{this.props.sortBy==='recentlyPlayed' ? this.showSortDirection() : null}</th>
+        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'playCount'}>Play Count{this.props.sortBy==='playCount' ? this.showSortDirection() : null}</th>
+        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'lastPlayed'}>Last Played{this.props.sortBy==='lastPlayed' ? this.showSortDirection() : null}</th>
       </tr>
       </thead>
     );
@@ -132,6 +162,7 @@ class PlayCountTable extends Component {
       let artistsName = createArtistsName(item);
       let songName = createSongName(item);
       let playCount = createPlayCount(item);
+      let lastPlayed = reformatDateStr(item);
 
       return (
         <tr key={i} id={i}>
@@ -139,6 +170,7 @@ class PlayCountTable extends Component {
           <td>{songName}</td>
           <td>{artistsName}</td>
           <td>{playCount}</td>
+          <td>{lastPlayed}</td>
         </tr>
       )
     });

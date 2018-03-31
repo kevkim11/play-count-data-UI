@@ -11,7 +11,8 @@ export const SortFilters = {
 export const SortBys = {
   name: 'name',
   artists: 'artists',
-  playCount: 'playCount'
+  playCount: 'playCount',
+  lastPlayed: 'lastPlayed'
 };
 // API
 export const REQUEST_PLAYEDSONGS = 'REQUEST_PLAYEDSONGS';
