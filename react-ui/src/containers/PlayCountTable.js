@@ -166,11 +166,11 @@ class PlayCountTable extends Component {
 
       return (
         <tr key={i} id={i}>
-          <td>{i+1}</td>
-          <td>{songName}</td>
-          <td>{artistsName}</td>
-          <td>{playCount}</td>
-          <td>{lastPlayed}</td>
+          <td className={"col-md-1"}>{i+1}</td>
+          <td className={"col-md-3"}>{songName}</td>
+          <td className={"col-md-3"}>{artistsName}</td>
+          <td className={"col-md-2"}>{playCount}</td>
+          <td className={"col-md-3"}>{lastPlayed}</td>
         </tr>
       )
     });
