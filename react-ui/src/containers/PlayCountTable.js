@@ -67,6 +67,12 @@ class PlayCountTable extends Component {
             if(a.timestamps.length > b.timestamps.length) return 1;
             return 0
           });
+      } else if(sortBy===SortBys.artists){
+        newSortedList = data.slice().sort(function(a, b) {
+          if (a[sortBy][0].name < b[sortBy][0].name) return -1;
+          if (a[sortBy][0].name > b[sortBy][0].name) return 1;
+          return 0
+        });
       } else if(sortBy===SortBys.lastPlayed){
         newSortedList = data.slice().sort(function(a, b){
           a = createLastPlayedDateObj(a);
@@ -93,6 +99,12 @@ class PlayCountTable extends Component {
           a = createLastPlayedDateObj(a);
           b = createLastPlayedDateObj(b);
           return b - a
+        });
+      } else if(sortBy===SortBys.artists){
+        newSortedList = data.slice().sort(function(a, b) {
+          if (a[sortBy][0].name < b[sortBy][0].name) return 1;
+          if (a[sortBy][0].name > b[sortBy][0].name) return -1;
+          return 0
         });
       }
       else{
