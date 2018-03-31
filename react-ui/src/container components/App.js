@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {fetchPlayedSongIfNeeded} from '../actions'
-import PlayCountTable from '../containers/PlayCountTable.js' // Container Component
+import PlayCountTable from '../presentational components/PlayCountTable.js' // Container Component
 import '../css/App.css';
 
 class App extends Component {
@@ -18,15 +18,12 @@ class App extends Component {
   }
 
   render() {
-    console.log('INSIDE RENDER OF APP',this.props);
-    const {data, isFetching, sortFilter, sortBy} = this.props;
-    console.log('isFetching',isFetching);
-    console.log('data',data);
+    const {data, isFetching} = this.props;
     if(isFetching && !data){return <p> {'LOADING'} </p>}
     if(!isFetching && !data){return <p> {'EMPTY'} </p>}
     return (
       <div className={'container'}>
-        <PlayCountTable data={data} sortFilter={sortFilter} sortBy={sortBy}/>
+        <PlayCountTable/>
       </div>
     );
   }
@@ -44,8 +41,8 @@ App.propTypes = {
  */
 function mapStateToProps(state){
   const { recentlyPlayedSongs } = state;
-  const {data, isFetching, dispatch, sortFilter, sortBy} = recentlyPlayedSongs;
-  return({data, isFetching, dispatch, sortFilter, sortBy})
+  const {data, isFetching, dispatch} = recentlyPlayedSongs;
+  return({data, isFetching, dispatch})
 }
 
 export default connect(mapStateToProps)(App)

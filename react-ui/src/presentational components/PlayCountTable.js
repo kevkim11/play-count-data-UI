@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
-import { Table, Glyphicon } from 'react-bootstrap';
+import { Table, Glyphicon, Image } from 'react-bootstrap';
 import {connect} from "react-redux";
 import {setSortFilter, SortBys, SortFilters} from '../actions'
 
@@ -60,8 +60,6 @@ class PlayCountTable extends Component {
      * TODO: REFACTOR THIS SORT FUNCTION. LOOKS HORENDOUS
      * */
     const {data, sortFilter, sortBy} = this.props;
-    console.log('data is', data);
-    console.log('this.props.sortFilter is', sortFilter);
     let newSortedList = Object.assign({}, data);
 
     if(sortFilter===SortFilters.ASC){
@@ -126,9 +124,6 @@ class PlayCountTable extends Component {
 
   changeSortDirection(newSortBy){
     const {sortFilter, sortBy} = this.props;
-    console.log('sortBy is', sortBy);
-    console.log('this.props.sortFilter is', sortFilter);
-    console.log('newSortBy is', newSortBy);
 
     if(newSortBy!==sortBy) { // Defaults to ASC
       return {sortFilter: SortFilters.ASC, sortBy: newSortBy}
@@ -167,10 +162,10 @@ class PlayCountTable extends Component {
       <tr>
         <th id={'albumImage'}> Album </th>
         <th id={'index'}>Index</th>
-        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'name'}>Name {this.props.sortBy==='name' ? this.showSortDirection() : null}</th>
-        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'artists'}>Artist{this.props.sortBy==='artists' ? this.showSortDirection() : null}</th>
-        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'playCount'}>Play Count{this.props.sortBy==='playCount' ? this.showSortDirection() : null}</th>
-        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'lastPlayed'}>Last Played{this.props.sortBy==='lastPlayed' ? this.showSortDirection() : null}</th>
+        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'name'}>Name {this.props.sortBy===SortBys.name ? this.showSortDirection() : null}</th>
+        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'artists'}>Artist{this.props.sortBy===SortBys.artists ? this.showSortDirection() : null}</th>
+        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'playCount'}>Play Count{this.props.sortBy===SortBys.playCount ? this.showSortDirection() : null}</th>
+        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'lastPlayed'}>Last Played{this.props.sortBy===SortBys.lastPlayed ? this.showSortDirection() : null}</th>
       </tr>
       </thead>
     );
@@ -184,7 +179,8 @@ class PlayCountTable extends Component {
 
       return (
         <tr key={i} id={i}>
-          <td className={"col-md-1"}><img className="track-img" src={albumImgUrl} alt="" style={{height:50}}/></td>
+          {/*<td className={"col-md-1"}><img className="track-img" src={albumImgUrl} alt="" style={{height:50}}/></td>*/}
+          <td className={"col-md-1"}><Image className="track-img" src={albumImgUrl} alt="" style={{height:50}}/></td>
           <td className={"col-md-1"}>{i+1}</td>
           <td className={"col-md-3"}>{songName}</td>
           <td className={"col-md-3"}>{artistsName}</td>
@@ -207,11 +203,11 @@ class PlayCountTable extends Component {
 PlayCountTable.propTypes = {
   data: PropTypes.array.isRequired,
   sortFilter: PropTypes.string.isRequired,
-  sortBy: PropTypes.string.isRequired
+  sortBy: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state){
-  // Get the reducer from the state
   const { recentlyPlayedSongs } = state;
   const {data, sortFilter, sortBy, dispatch} = recentlyPlayedSongs;
   return({data, sortFilter,sortBy, dispatch})
