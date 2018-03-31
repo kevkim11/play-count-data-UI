@@ -32,6 +32,10 @@ function createLastPlayedString(item) {
   return item.timestamps[item.timestamps.length-1]
 }
 
+function createImgUrl(item) {
+  return item.album.images[1].url
+}
+
 function createLastPlayedDateObj(item){
   return new Date(createLastPlayedString(item))
 }
@@ -161,7 +165,8 @@ class PlayCountTable extends Component {
     const tableHead = (
       <thead>
       <tr>
-        <th id={'index'}>index</th>
+        <th id={'albumImage'}> Album </th>
+        <th id={'index'}>Index</th>
         <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'name'}>Name {this.props.sortBy==='name' ? this.showSortDirection() : null}</th>
         <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'artists'}>Artist{this.props.sortBy==='artists' ? this.showSortDirection() : null}</th>
         <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'playCount'}>Play Count{this.props.sortBy==='playCount' ? this.showSortDirection() : null}</th>
@@ -175,13 +180,15 @@ class PlayCountTable extends Component {
       let songName = createSongName(item);
       let playCount = createPlayCount(item);
       let lastPlayed = reformatDateStr(item);
+      let albumImgUrl = createImgUrl(item);
 
       return (
         <tr key={i} id={i}>
+          <td className={"col-md-1"}><img className="track-img" src={albumImgUrl} alt="" style={{height:50}}/></td>
           <td className={"col-md-1"}>{i+1}</td>
           <td className={"col-md-3"}>{songName}</td>
           <td className={"col-md-3"}>{artistsName}</td>
-          <td className={"col-md-2"}>{playCount}</td>
+          <td className={"col-md-1"}>{playCount}</td>
           <td className={"col-md-3"}>{lastPlayed}</td>
         </tr>
       )
