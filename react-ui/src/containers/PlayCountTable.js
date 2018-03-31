@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
-import { Table } from 'react-bootstrap';
+import { Table, Glyphicon } from 'react-bootstrap';
 import {connect} from "react-redux";
 import {setSortFilter, SortBys, SortFilters} from '../actions'
 
@@ -35,53 +35,40 @@ class PlayCountTable extends Component {
 
   sortData(){
     /**
-     * Sort's Data based on the filter props
+     * Sort's Data based on this props
+     * TODO: REFACTOR THIS SORT FUNCTION. LOOKS HORENDOUS
      * */
     const {data, sortFilter, sortBy} = this.props;
     console.log('data is', data);
     console.log('this.props.sortFilter is', sortFilter);
     let newSortedList = Object.assign({}, data);
+
     if(sortFilter===SortFilters.ASC){
-      if(sortBy===SortBys.name){
+      if(sortBy===SortBys.playCount){
+          newSortedList = data.slice().sort(function(a, b){
+            if(a.timestamps.length < b.timestamps.length) return -1;
+            if(a.timestamps.length > b.timestamps.length) return 1;
+            return 0
+          });
+      } else {
         newSortedList = data.slice().sort(function(a, b){
           if(a[sortBy] < b[sortBy]) return -1;
           if(a[sortBy] > b[sortBy]) return 1;
           return 0
         });
       }
-      if(sortBy===SortBys.artists){
-        newSortedList = data.slice().sort(function(a, b){
-          if(a[sortBy][0].name < b[sortBy][0].name) return -1;
-          if(a[sortBy][0].name > b[sortBy][0].name) return 1;
-          return 0
-        });
-      }
-      if(sortBy===SortBys.playCount){
-        newSortedList = data.slice().sort(function(a, b){
-          if(a.timestamps.length < b.timestamps.length) return -1;
-          if(a.timestamps.length > b.timestamps.length) return 1;
-          return 0
-        });
-      }
     } else if(sortFilter===SortFilters.DESC){
-      if(sortBy===SortBys.name){
-        newSortedList = data.slice().sort(function(a, b){
-          if(a[sortBy] < b[sortBy]) return 1;
-          if(a[sortBy] > b[sortBy]) return -1;
-          return 0
-        });
-      }
-      if(sortBy===SortBys.artists){
-        newSortedList = data.slice().sort(function(a, b){
-          if(a[sortBy][0].name < b[sortBy][0].name) return 1;
-          if(a[sortBy][0].name > b[sortBy][0].name) return -1;
-          return 0
-        });
-      }
       if(sortBy===SortBys.playCount){
         newSortedList = data.slice().sort(function(a, b){
           if(a.timestamps.length < b.timestamps.length) return 1;
           if(a.timestamps.length > b.timestamps.length) return -1;
+          return 0
+        });
+      }
+      else{
+        newSortedList = data.slice().sort(function(a, b){
+          if(a[sortBy] < b[sortBy]) return 1;
+          if(a[sortBy] > b[sortBy]) return -1;
           return 0
         });
       }
@@ -98,7 +85,7 @@ class PlayCountTable extends Component {
     console.log('newSortBy is', newSortBy);
 
     if(newSortBy!==sortBy) {
-      return {sortFilter: SortFilters.UNSORTED, sortBy: newSortBy}
+      return {sortFilter: SortFilters.ASC, sortBy: newSortBy}
     }
     switch (sortFilter){
       case SortFilters.ASC:
@@ -110,20 +97,33 @@ class PlayCountTable extends Component {
     }
   }
 
+  showSortDirection(){
+    const {sortFilter} = this.props;
+    switch (sortFilter){
+      case SortFilters.ASC:
+        return <Glyphicon glyph="menu-down" style={{zIndex: -1}}/>;
+      case SortFilters.DESC:
+        return <Glyphicon glyph="menu-up" style={{zIndex: -1}} />;
+      case SortFilters.UNSORTED:
+        return null
+    }
+  }
+
   render() {
     console.log('playCountTable Props are', this.props);
     /* TODO Going to need to make the tableHead it's own component for sorting functionality
      * i.e. Component Picker https://github.com/reactjs/redux/blob/master/docs/advanced/ExampleRedditAPI.md
      * Will Need to move tableHead/sort to Components instead of container
     */
-    const {dispatch, sortBy} = this.props;
+    const {dispatch} = this.props;
     const tableHead = (
       <thead>
       <tr>
-        <th onClick={null}>index</th>
-        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'name'}>Name</th>
-        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'artists'}>Artist</th>
-        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'playCount'}>Play Count</th>
+        <th id={'index'}>index</th>
+        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'name'}>Name {this.props.sortBy==='name' ? this.showSortDirection() : null}</th>
+        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'artists'}>Artist{this.props.sortBy==='artists' ? this.showSortDirection() : null}</th>
+        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'playCount'}>Play_Count{this.props.sortBy==='playCount' ? this.showSortDirection() : null}</th>
+        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'recentlyPlayed'}>Recently Played{this.props.sortBy==='recentlyPlayed' ? this.showSortDirection() : null}</th>
       </tr>
       </thead>
     );
