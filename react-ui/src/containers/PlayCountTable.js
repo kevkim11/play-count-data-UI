@@ -45,7 +45,7 @@ function reformatDateStr(item){
   let min = dt.getMinutes(); min = min<10 ? '0'+min : min;
   let ampm = "am";
   let hr = dt.getHours();
-  if(hr>12){hr -= 12; ampm="pm";}
+  if(hr>12 || hr===0){hr = Math.abs(hr - 12); ampm="pm";}
   return `${dt.getMonth( ) + 1}/${dt.getDate()}/${dt.getFullYear()}, ${hr}:${min} ${ampm}`
 }
 
