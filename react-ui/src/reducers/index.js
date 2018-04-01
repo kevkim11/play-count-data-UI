@@ -5,13 +5,16 @@ import {
   SortBys,
   REQUEST_PLAYEDSONGS,
   RECEIVED_PLAYEDSONGS,
-  INVALIDATE_PLAYEDSONGS
+  INVALIDATE_PLAYEDSONGS,
+  SET_VIEW_FILTER,
+  ViewBys
 } from '../actions'
 // const { UNSORTED } = SET_SORT_FILTER;
 
 const initialState = {
   sortFilter: SortFilters.UNSORTED,
   sortBy: SortBys.name,
+  viewBy: ViewBys.songs,
   data: [], // items
   isFetching: false, //bool
   didInvalidate: false,
@@ -19,14 +22,14 @@ const initialState = {
 };
 
 /** Sort Reducers*/
-function sortFilter(state = SortFilters.UNSORTED, action) {
-  switch (action.type) {
-    case SET_SORT_FILTER:
-      return action.filter;
-    default:
-      return state;
-  }
-}
+// function sortFilter(state = SortFilters.UNSORTED, action) {
+//   switch (action.type) {
+//     case SET_SORT_FILTER:
+//       return action.filter;
+//     default:
+//       return state;
+//   }
+// }
 
 /** API Reducers*/
 function recentlyPlayedSongs(state=initialState, action) {
@@ -52,6 +55,11 @@ function recentlyPlayedSongs(state=initialState, action) {
         sortBy: action.filter.sortBy,
         data: state.data
       });
+    case SET_VIEW_FILTER:
+      return Object.assign({}, state, {
+        data: state.data,
+        viewBy: action.viewBy
+      });
     default:
       return state
   }
@@ -73,4 +81,4 @@ let rootReducer = combineReducers({
  3) Call non-pure functions, e.g. Date.now() or Math.random().
  * */
 
-export default  rootReducer
+export default rootReducer

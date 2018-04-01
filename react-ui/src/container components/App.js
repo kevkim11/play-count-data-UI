@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {fetchPlayedSongIfNeeded} from '../actions'
+import {fetchPlayedSongIfNeeded, ViewBys} from '../actions'
 import PlayCountTable from '../presentational components/PlayCountTable.js' // Container Component
 import '../css/App.css';
 // Bootstrap Components
@@ -35,10 +35,10 @@ class App extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav>
-              <NavItem eventKey={1} href="#">
+              <NavItem eventKey={1} onClick={null}>
                 Songs
               </NavItem>
-              <NavItem eventKey={2} href="#">
+              <NavItem eventKey={2} onClick={null} href="#">
                 Album
               </NavItem>
               <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
@@ -50,7 +50,7 @@ class App extends Component {
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
-        </Navbar>;
+        </Navbar>
 
 
 
@@ -63,7 +63,8 @@ class App extends Component {
 App.propTypes = {
   data: PropTypes.array.isRequired,
   isFetching: PropTypes.bool.isRequired,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  viewBy: PropTypes.string.isRequired
 };
 
 /**
@@ -72,8 +73,8 @@ App.propTypes = {
  */
 function mapStateToProps(state){
   const { recentlyPlayedSongs } = state;
-  const {data, isFetching, dispatch} = recentlyPlayedSongs;
-  return({data, isFetching, dispatch})
+  const {data, isFetching, dispatch, viewBy} = recentlyPlayedSongs;
+  return({data, isFetching, dispatch, viewBy})
 }
 
 export default connect(mapStateToProps)(App)

@@ -17,12 +17,24 @@ export const SortBys = {
 // API
 export const REQUEST_PLAYEDSONGS = 'REQUEST_PLAYEDSONGS';
 export const RECEIVED_PLAYEDSONGS = 'RECEIVED_PLAYEDSONGS';
-export const INVALIDATE_PLAYEDSONGS = 'INVALIDATE_PLAYEDSONGS'
+export const INVALIDATE_PLAYEDSONGS = 'INVALIDATE_PLAYEDSONGS';
+// Views
+export const SET_VIEW_FILTER = 'SET_VIEW';
+export const ViewBys = {
+  songs: 'songs',
+  artists: 'artists'
+};
 
 /** Sort Table Action Creator*/
 export function setSortFilter(filter) {
   // Start Here.
   return { type: SET_SORT_FILTER, filter }
+}
+
+/** Sort Table Action Creator*/
+export function setViewFilter(viewsBy) {
+  // Start Here.
+  return { type: SET_VIEW_FILTER, viewsBy }
 }
 
 /** API Call Action Creator*/

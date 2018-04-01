@@ -181,10 +181,10 @@ class PlayCountTable extends Component {
         <tr key={i} id={i}>
           {/*<td className={"col-md-1"}><img className="track-img" src={albumImgUrl} alt="" style={{height:50}}/></td>*/}
           <td className={"col-md-1"}><Image className="track-img" src={albumImgUrl} alt="" style={{height:50}}/></td>
-          <td className={"col-md-1"}>{i+1}</td>
+          <td className={"col-md-1"} style={{textAlign: "center"}}>{i+1}</td>
           <td className={"col-md-3"}>{songName}</td>
           <td className={"col-md-3"}>{artistsName}</td>
-          <td className={"col-md-1"}>{playCount}</td>
+          <td className={"col-md-1"} style={{textAlign: "center"}}>{playCount}</td>
           <td className={"col-md-3"}>{lastPlayed}</td>
         </tr>
       )
