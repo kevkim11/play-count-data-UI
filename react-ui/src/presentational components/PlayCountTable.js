@@ -43,9 +43,12 @@ function createLastPlayedDateObj(item){
 function reformatDateStr(item){
   const dt = createLastPlayedDateObj(item);
   let min = dt.getMinutes(); min = min<10 ? '0'+min : min;
-  let ampm = "am";
   let hr = dt.getHours();
-  if(hr>12 || hr===0){hr = Math.abs(hr - 12); ampm="pm";}
+  let ampm = hr>=12 ? "pm" : "am";
+
+  if(hr>12){hr-=12;}
+  else if(hr===0){hr=12;}
+
   return `${dt.getMonth( ) + 1}/${dt.getDate()}/${dt.getFullYear()}, ${hr}:${min} ${ampm}`
 }
 
