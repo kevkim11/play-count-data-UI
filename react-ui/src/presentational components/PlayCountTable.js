@@ -169,10 +169,10 @@ class PlayCountTable extends Component {
       <tr>
         <th id={'albumImage'}> Album </th>
         <th id={'index'}>Index</th>
-        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'name'}>Name {this.props.sortBy===SortBys.name ? this.showSortDirection() : null}</th>
-        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'artists'}>Artist{this.props.sortBy===SortBys.artists ? this.showSortDirection() : null}</th>
-        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'playCount'}>Play Count{this.props.sortBy===SortBys.playCount ? this.showSortDirection() : null}</th>
-        <th onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'lastPlayed'}>Last Played{this.props.sortBy===SortBys.lastPlayed ? this.showSortDirection() : null}</th>
+        <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'name'}>Name {this.props.sortBy===SortBys.name ? this.showSortDirection() : null}</th>
+        <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'artists'}>Artist{this.props.sortBy===SortBys.artists ? this.showSortDirection() : null}</th>
+        <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'playCount'}>Play Count{this.props.sortBy===SortBys.playCount ? this.showSortDirection() : null}</th>
+        <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'lastPlayed'}>Last Played{this.props.sortBy===SortBys.lastPlayed ? this.showSortDirection() : null}</th>
       </tr>
       </thead>
     );
@@ -186,7 +186,7 @@ class PlayCountTable extends Component {
       let songUrl = createSongURL(item);
 
       return (
-        <tr key={i} id={i} onClick={()=>{window.open(`${createSongURL(item)}`, '_blank')}}>
+        <tr className="clickable-row" key={i} id={i} onClick={()=>{window.open(songUrl, '_blank')}}>
           <td className={"col-md-1"}><Image className="track-img" src={albumImgUrl} alt="" style={{height:50}}/></td>
           <td className={"col-md-1"} style={{textAlign: "center"}}>{i+1}</td>
           <td className={"col-md-3"}>{songName}</td>

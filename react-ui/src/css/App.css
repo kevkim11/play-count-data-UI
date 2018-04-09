@@ -21,3 +21,10 @@ body {
   font-weight: 300;
   font-size: 14px;
 }
+
+.clickable-row {
+  cursor: pointer;
+}
+.clickable-header-column {
+  cursor: pointer;
+}
