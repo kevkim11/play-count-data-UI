@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {fetchPlayedSongIfNeeded, ViewBys} from '../actions'
+import {fetchPlayedSongIfNeeded, SortBys, SortFilters, ViewBys, setViewFilter} from '../actions'
 import PlayCountTable from '../presentational components/PlayCountTable.js' // Container Component
+import Grid from '../container components/AlbumGrid/Grid.js' // Container Component
 import '../css/App.css';
+
 // Bootstrap Components
 import {Nav, Navbar, NavItem, MenuItem, NavDropdown} from 'react-bootstrap'
 
@@ -20,8 +22,25 @@ class App extends Component {
     dispatch(fetchPlayedSongIfNeeded());
   }
 
+  changeView(newViewBy){
+    const {sortFilter, sortBy, viewBy} = this.props;
+
+    if(newViewBy!==viewBy) { // Defaults to ASC
+      // return {sortFilter: SortFilters.ASC, sortBy: newSortBy}
+      return {viewBy, sortBy, sortFilter}
+    }
+    switch (newViewBy) {
+      case ViewBys.songs:
+        return {sortFilter: SortFilters.UNSORTED, sortBy: SortBys.name, viewBy: newViewBy};
+      case ViewBys.artists:
+        return {sortFilter: SortFilters.DESC, sortBy: SortBys.lastPlayed, viewBy: newViewBy};
+      default:
+        return {viewBy, sortBy, sortFilter}
+    }
+  }
+
   render() {
-    const {data, isFetching} = this.props;
+    const {data, isFetching, viewBy, dispatch} = this.props;
     if(isFetching && !data){return <p> {'LOADING'} </p>}
     if(!isFetching && !data){return <p> {'EMPTY'} </p>}
     return (
@@ -35,10 +54,10 @@ class App extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav>
-              <NavItem eventKey={1} onClick={null}>
+              <NavItem id='songs' eventKey={1} onClick={(e)=>{dispatch(setViewFilter(e.target.id))}}>
                 Songs
               </NavItem>
-              <NavItem eventKey={2} onClick={null} href="#">
+              <NavItem id='artists' eventKey={2} onClick={(e)=>{dispatch(setViewFilter(e.target.id))}} href="#">
                 Album
               </NavItem>
               <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
@@ -51,10 +70,7 @@ class App extends Component {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-
-
-
-        <PlayCountTable/>
+        {viewBy===ViewBys.songs ? <PlayCountTable/> : <Grid/>}
       </div>
     );
   }

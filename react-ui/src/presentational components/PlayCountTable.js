@@ -24,6 +24,10 @@ function createSongName(item){
   return item.name
 }
 
+function createSongURL(item) {
+  return item.external_urls.spotify
+}
+
 function createPlayCount(item) {
   return item.timestamps.length
 }
@@ -179,10 +183,10 @@ class PlayCountTable extends Component {
       let playCount = createPlayCount(item);
       let lastPlayed = reformatDateStr(item);
       let albumImgUrl = createImgUrl(item);
+      let songUrl = createSongURL(item);
 
       return (
-        <tr key={i} id={i}>
-          {/*<td className={"col-md-1"}><img className="track-img" src={albumImgUrl} alt="" style={{height:50}}/></td>*/}
+        <tr key={i} id={i} onClick={()=>{window.open(`${createSongURL(item)}`, '_blank')}}>
           <td className={"col-md-1"}><Image className="track-img" src={albumImgUrl} alt="" style={{height:50}}/></td>
           <td className={"col-md-1"} style={{textAlign: "center"}}>{i+1}</td>
           <td className={"col-md-3"}>{songName}</td>

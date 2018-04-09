@@ -31,10 +31,10 @@ export function setSortFilter(filter) {
   return { type: SET_SORT_FILTER, filter }
 }
 
-/** Sort Table Action Creator*/
-export function setViewFilter(viewsBy) {
+/** Set View Filter Action Creator*/
+export function setViewFilter(viewsBy, sortBy, sortFilter) {
   // Start Here.
-  return { type: SET_VIEW_FILTER, viewsBy }
+  return { type: SET_VIEW_FILTER, viewsBy, sortBy, sortFilter }
 }
 
 /** API Call Action Creator*/
