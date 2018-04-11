@@ -45,32 +45,33 @@ class App extends Component {
     if(!isFetching && !data){return <p> {'EMPTY'} </p>}
     return (
       <div className={'container'}>
-        <Navbar inverse collapseOnSelect>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <a href="#">React-Bootstrap</a>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav>
-              <NavItem id='songs' eventKey={1} onClick={(e)=>{dispatch(setViewFilter(e.target.id))}}>
-                Songs
-              </NavItem>
-              <NavItem id='artists' eventKey={2} onClick={(e)=>{dispatch(setViewFilter(e.target.id))}} href="#">
-                Album
-              </NavItem>
-              <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-                <MenuItem eventKey={3.1}>Action</MenuItem>
-                <MenuItem eventKey={3.2}>Another action</MenuItem>
-                <MenuItem eventKey={3.3}>Something else here</MenuItem>
-                <MenuItem divider />
-                <MenuItem eventKey={3.3}>Separated link</MenuItem>
-              </NavDropdown>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-        {viewBy===ViewBys.songs ? <PlayCountTable/> : <Grid/>}
+        {/*<Navbar inverse collapseOnSelect>*/}
+          {/*<Navbar.Header>*/}
+            {/*<Navbar.Brand>*/}
+              {/*<a href="#">React-Bootstrap</a>*/}
+            {/*</Navbar.Brand>*/}
+            {/*<Navbar.Toggle />*/}
+          {/*</Navbar.Header>*/}
+          {/*<Navbar.Collapse>*/}
+            {/*<Nav>*/}
+              {/*<NavItem id='songs' eventKey={1} onClick={(e)=>{dispatch(setViewFilter(e.target.id))}}>*/}
+                {/*Songs*/}
+              {/*</NavItem>*/}
+              {/*<NavItem id='artists' eventKey={2} onClick={(e)=>{dispatch(setViewFilter(e.target.id))}} href="#">*/}
+                {/*Album*/}
+              {/*</NavItem>*/}
+              {/*<NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">*/}
+                {/*<MenuItem eventKey={3.1}>Action</MenuItem>*/}
+                {/*<MenuItem eventKey={3.2}>Another action</MenuItem>*/}
+                {/*<MenuItem eventKey={3.3}>Something else here</MenuItem>*/}
+                {/*<MenuItem divider />*/}
+                {/*<MenuItem eventKey={3.3}>Separated link</MenuItem>*/}
+              {/*</NavDropdown>*/}
+            {/*</Nav>*/}
+          {/*</Navbar.Collapse>*/}
+        {/*</Navbar>*/}
+        {/*{viewBy===ViewBys.songs ? <PlayCountTable/> : <Grid/>}*/}
+        <PlayCountTable/>
       </div>
     );
   }
