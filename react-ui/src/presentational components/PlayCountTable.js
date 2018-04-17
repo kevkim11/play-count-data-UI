@@ -220,10 +220,10 @@ class PlayCountTable extends Component {
         <th id={'index'}>Index</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'name'}>Name {this.props.sortBy===SortBys.name ? this.showSortDirection() : null}</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'artists'}>Artist{this.props.sortBy===SortBys.artists ? this.showSortDirection() : null}</th>
+        <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'album'}>Album{this.props.sortBy===SortBys.album ? this.showSortDirection() : null}</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'playCount'}>Plays{this.props.sortBy===SortBys.playCount ? this.showSortDirection() : null}</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'lastPlayed'}>Last Played{this.props.sortBy===SortBys.lastPlayed ? this.showSortDirection() : null}</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'dateAdded'}>Date Added{this.props.sortBy===SortBys.dateAdded ? this.showSortDirection() : null}</th>
-        <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'album'}>Album{this.props.sortBy===SortBys.album ? this.showSortDirection() : null}</th>
       </tr>
       </thead>
     );
@@ -244,10 +244,10 @@ class PlayCountTable extends Component {
           <td className={"col-md-1"} style={{textAlign: "center"}}>{i+1}</td>
           <td className={"col-md-2"}>{songName}</td>
           <td className={"col-md-3"}>{artistsName}</td>
+          <td className={"col-md-3"}>{albumName}</td>
           <td className={"col-md-1"} style={{textAlign: "center"}}>{playCount}</td>
           <td className={"col-md-1"}>{lastPlayed}</td>
           <td className={"col-md-1"}>{firstPlayed}</td>
-          <td className={"col-md-3"}>{albumName}</td>
         </tr>
       )
     });
