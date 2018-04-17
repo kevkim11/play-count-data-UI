@@ -12,7 +12,8 @@ export const SortBys = {
   name: 'name',
   artists: 'artists',
   playCount: 'playCount',
-  lastPlayed: 'lastPlayed'
+  lastPlayed: 'lastPlayed',
+  dateAdded: 'dateAdded'
 };
 // API
 export const REQUEST_PLAYEDSONGS = 'REQUEST_PLAYEDSONGS';
