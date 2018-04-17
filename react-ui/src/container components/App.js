@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {fetchPlayedSongIfNeeded, SortBys, SortFilters, ViewBys, setViewFilter} from '../actions'
 import PlayCountTable from '../presentational components/PlayCountTable.js' // Container Component
-import Grid from '../container components/AlbumGrid/Grid.js' // Container Component
 import '../css/App.css';
 
 // Bootstrap Components
-import {Nav, Navbar, NavItem, MenuItem, NavDropdown} from 'react-bootstrap'
+// import {Nav, Navbar, NavItem, MenuItem, NavDropdown} from 'react-bootstrap'
 
 
 class App extends Component {
@@ -44,7 +43,8 @@ class App extends Component {
     if(isFetching && !data){return <p> {'LOADING'} </p>}
     if(!isFetching && !data){return <p> {'EMPTY'} </p>}
     return (
-      <div className={'container'}>
+      <div>
+      {/*<div className={'container'}>*/}
         {/*<Navbar inverse collapseOnSelect>*/}
           {/*<Navbar.Header>*/}
             {/*<Navbar.Brand>*/}

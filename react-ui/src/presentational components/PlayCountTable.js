@@ -41,8 +41,12 @@ function createFirstPlayedString(item) {
   return item.timestamps[0]
 }
 
-function createImgUrl(item) {
+function createAlbumImgUrl(item) {
   return item.album.images[1].url
+}
+
+function createAlbumName(item){
+  return item.album.name
 }
 
 function createLastPlayedDateObj(item){
@@ -52,6 +56,8 @@ function createLastPlayedDateObj(item){
 function createFirstPlayedDateObj(item){
   return new Date(createFirstPlayedString(item))
 }
+
+
 
 function reformatDateStr(dt){
   /**
@@ -75,13 +81,13 @@ class PlayCountTable extends Component {
 
   sortData(){
     /**
-     * Sort's Data based on this props
+     * Sort's Data based on props being passed down from reducer
      * TODO: REFACTOR THIS SORT FUNCTION. LOOKS HORENDOUS
      * */
     const {data, sortFilter, sortBy} = this.props;
     let newSortedList = Object.assign({}, data);
 
-    if(sortFilter===SortFilters.ASC){
+    if(sortFilter===SortFilters.ASC){ // All ASC
       if(sortBy===SortBys.playCount){
           newSortedList = data.slice().sort(function(a, b){
             if(a.timestamps.length < b.timestamps.length) return -1;
@@ -92,6 +98,12 @@ class PlayCountTable extends Component {
         newSortedList = data.slice().sort(function(a, b) {
           if (a[sortBy][0].name < b[sortBy][0].name) return -1;
           if (a[sortBy][0].name > b[sortBy][0].name) return 1;
+          return 0
+        });
+      } else if(sortBy===SortBys.album){
+        newSortedList = data.slice().sort(function(a, b) {
+          if (a[sortBy].name < b[sortBy].name) return -1;
+          if (a[sortBy].name > b[sortBy].name) return 1;
           return 0
         });
       } else if(sortBy===SortBys.lastPlayed){
@@ -113,7 +125,7 @@ class PlayCountTable extends Component {
           return 0
         });
       }
-    } else if(sortFilter===SortFilters.DESC){
+    } else if(sortFilter===SortFilters.DESC){ // All DESC
       if(sortBy===SortBys.playCount){
         newSortedList = data.slice().sort(function(a, b){
           if(a.timestamps.length < b.timestamps.length) return 1;
@@ -139,6 +151,13 @@ class PlayCountTable extends Component {
         newSortedList = data.slice().sort(function(a, b) {
           if (a[sortBy][0].name < b[sortBy][0].name) return 1;
           if (a[sortBy][0].name > b[sortBy][0].name) return -1;
+          return 0
+        });
+      }
+      else if(sortBy===SortBys.album){
+        newSortedList = data.slice().sort(function(a, b) {
+          if (a[sortBy].name < b[sortBy].name) return 1;
+          if (a[sortBy].name > b[sortBy].name) return -1;
           return 0
         });
       }
@@ -198,12 +217,13 @@ class PlayCountTable extends Component {
       <thead>
       <tr>
         {/*<th id={'albumImage'}> Album </th>*/}
-        {/*<th id={'index'}>Index</th>*/}
+        <th id={'index'}>Index</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'name'}>Name {this.props.sortBy===SortBys.name ? this.showSortDirection() : null}</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'artists'}>Artist{this.props.sortBy===SortBys.artists ? this.showSortDirection() : null}</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'playCount'}>Plays{this.props.sortBy===SortBys.playCount ? this.showSortDirection() : null}</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'lastPlayed'}>Last Played{this.props.sortBy===SortBys.lastPlayed ? this.showSortDirection() : null}</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'dateAdded'}>Date Added{this.props.sortBy===SortBys.dateAdded ? this.showSortDirection() : null}</th>
+        <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'album'}>Album{this.props.sortBy===SortBys.album ? this.showSortDirection() : null}</th>
       </tr>
       </thead>
     );
@@ -211,21 +231,23 @@ class PlayCountTable extends Component {
     const tableBody = this.sortData().map((item, i) => {
       let artistsName = createArtistsName(item);
       let songName = createSongName(item);
+      let albumName = createAlbumName(item);
       let playCount = createPlayCount(item);
       let lastPlayed = reformatDateStr(createLastPlayedDateObj(item));
       let firstPlayed = reformatDateStr(createFirstPlayedDateObj(item));
-      let albumImgUrl = createImgUrl(item);
+      let albumImgUrl = createAlbumImgUrl(item);
       let songUrl = createSongURL(item);
 
       return (
         <tr className="clickable-row" key={i} id={i} onClick={()=>{window.open(songUrl, '_blank')}}>
           {/*<td className={"col-md-1"}><Image className="track-img" src={albumImgUrl} alt="" style={{height:50}}/></td>*/}
-          {/*<td className={"col-md-1"} style={{textAlign: "center"}}>{i+1}</td>*/}
-          <td className={"col-md-3"}>{songName}</td>
+          <td className={"col-md-1"} style={{textAlign: "center"}}>{i+1}</td>
+          <td className={"col-md-2"}>{songName}</td>
           <td className={"col-md-3"}>{artistsName}</td>
           <td className={"col-md-1"} style={{textAlign: "center"}}>{playCount}</td>
-          <td className={"col-md-2"}>{lastPlayed}</td>
-          <td className={"col-md-2"}>{firstPlayed}</td>
+          <td className={"col-md-1"}>{lastPlayed}</td>
+          <td className={"col-md-1"}>{firstPlayed}</td>
+          <td className={"col-md-3"}>{albumName}</td>
         </tr>
       )
     });
