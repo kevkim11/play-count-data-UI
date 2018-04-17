@@ -57,6 +57,22 @@ function createFirstPlayedDateObj(item){
   return new Date(createFirstPlayedString(item))
 }
 
+function msToMS( ms ) {
+  /**
+   * formats to m:ss
+   * */
+  // 1- Convert to seconds:
+  let seconds = ms / 1000;
+  // 2- Extract hours:
+  // let hours = parseInt(seconds/3600, 10 ); // 3,600 seconds in 1 hour
+  seconds = seconds % 3600; // seconds remaining after extracting hours
+  // 3- Extract minutes:
+  let min = parseInt( seconds / 60, 10 ); // 60 seconds in 1 minute
+  // 4- Keep only seconds not extracted to minutes:
+  seconds = parseInt(seconds % 60, 10);
+  seconds = seconds<10 ? '0'+seconds : seconds;
+  return `${min}:${seconds}`
+}
 
 
 function reformatDateStr(dt){
@@ -118,6 +134,12 @@ class PlayCountTable extends Component {
           b = createFirstPlayedDateObj(b);
           return a - b
         });
+      }else if(sortBy===SortBys.time){
+        newSortedList = data.slice().sort(function(a, b){
+          if (a.duration_ms < b.duration_ms) return -1;
+          if (a.duration_ms > b.duration_ms) return 1;
+          return 0
+        });
       }else {
         newSortedList = data.slice().sort(function(a, b){
           if(a[sortBy] < b[sortBy]) return -1;
@@ -158,6 +180,13 @@ class PlayCountTable extends Component {
         newSortedList = data.slice().sort(function(a, b) {
           if (a[sortBy].name < b[sortBy].name) return 1;
           if (a[sortBy].name > b[sortBy].name) return -1;
+          return 0
+        });
+      }
+      else if(sortBy===SortBys.time) {
+        newSortedList = data.slice().sort(function (a, b) {
+          if (a.duration_ms < b.duration_ms) return 1;
+          if (a.duration_ms > b.duration_ms) return -1;
           return 0
         });
       }
@@ -224,6 +253,8 @@ class PlayCountTable extends Component {
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'playCount'}>Plays{this.props.sortBy===SortBys.playCount ? this.showSortDirection() : null}</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'lastPlayed'}>Last Played{this.props.sortBy===SortBys.lastPlayed ? this.showSortDirection() : null}</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'dateAdded'}>Date Added{this.props.sortBy===SortBys.dateAdded ? this.showSortDirection() : null}</th>
+        <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'time'}>Time{this.props.sortBy===SortBys.time ? this.showSortDirection() : null}</th>
+        {/*<th id={'time'}>Time</th>*/}
       </tr>
       </thead>
     );
@@ -237,17 +268,19 @@ class PlayCountTable extends Component {
       let firstPlayed = reformatDateStr(createFirstPlayedDateObj(item));
       let albumImgUrl = createAlbumImgUrl(item);
       let songUrl = createSongURL(item);
+      let time = msToMS(item.duration_ms);
 
       return (
         <tr className="clickable-row" key={i} id={i} onClick={()=>{window.open(songUrl, '_blank')}}>
           {/*<td className={"col-md-1"}><Image className="track-img" src={albumImgUrl} alt="" style={{height:50}}/></td>*/}
           <td className={"col-md-1"} style={{textAlign: "center"}}>{i+1}</td>
           <td className={"col-md-2"}>{songName}</td>
-          <td className={"col-md-3"}>{artistsName}</td>
-          <td className={"col-md-3"}>{albumName}</td>
-          <td className={"col-md-1"} style={{textAlign: "center"}}>{playCount}</td>
+          <td className={"col-md-2"}>{artistsName}</td>
+          <td className={"col-md-2"}>{albumName}</td>
+          <td className={"col-md-2"} style={{textAlign: "center"}}>{playCount}</td>
           <td className={"col-md-1"}>{lastPlayed}</td>
           <td className={"col-md-1"}>{firstPlayed}</td>
+          <td className={"col-md-1"}>{time}</td>
         </tr>
       )
     });
