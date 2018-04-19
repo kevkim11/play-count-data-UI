@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {fetchPlayedSongIfNeeded, SortBys, SortFilters, ViewBys, setViewFilter} from '../actions'
 import PlayCountTable from '../presentational components/PlayCountTable.js' // Container Component
+import Footer from '../presentational components/Footer.js' // Container Component
 import '../css/App.css';
 
 // Bootstrap Components
@@ -40,11 +41,12 @@ class App extends Component {
 
   render() {
     const {data, isFetching, viewBy, dispatch} = this.props;
-    if(isFetching && !data){return <p> {'LOADING'} </p>}
-    if(!isFetching && !data){return <p> {'EMPTY'} </p>}
+    console.log('isFetching is', isFetching);
+    if(isFetching && data.length===0){return <p> {'LOADING'} </p>}
+    if(!isFetching && data.length===0){return <p> {'EMPTY'} </p>}
     return (
-      <div>
-      {/*<div className={'container'}>*/}
+
+      <div className={'container'}>
         {/*<Navbar inverse collapseOnSelect>*/}
           {/*<Navbar.Header>*/}
             {/*<Navbar.Brand>*/}
@@ -72,7 +74,9 @@ class App extends Component {
         {/*</Navbar>*/}
         {/*{viewBy===ViewBys.songs ? <PlayCountTable/> : <Grid/>}*/}
         <PlayCountTable/>
+        <Footer/>
       </div>
+
     );
   }
 }
