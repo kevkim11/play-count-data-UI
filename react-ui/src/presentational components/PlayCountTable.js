@@ -32,15 +32,6 @@ function createPlayCount(item) {
   return item.timestamps.length
 }
 
-function createLastPlayedString(item) {
-  return item.timestamps[item.timestamps.length-1]
-}
-
-function createFirstPlayedString(item) {
-  /** Helper function to get the first date played*/
-  return item.timestamps[0]
-}
-
 function createAlbumImgUrl(item) {
   return item.album.images[1].url
 }
@@ -49,15 +40,27 @@ function createAlbumName(item){
   return item.album.name
 }
 
+function sortTimestamps(item){
+  let timestamps = item["timestamps"].map((str)=>{
+    return new Date(str);
+  });
+  timestamps.sort((a,b)=>{
+    return a - b
+  });
+  return timestamps;
+}
+
 function createLastPlayedDateObj(item){
-  return new Date(createLastPlayedString(item))
+  let timestamps = sortTimestamps(item);
+  return timestamps[item.timestamps.length-1]
 }
 
 function createFirstPlayedDateObj(item){
-  return new Date(createFirstPlayedString(item))
+  let timestamps = sortTimestamps(item);
+  return timestamps[0]
 }
 
-function msToMS( ms ) {
+function msToMS(ms){
   /**
    * formats to m:ss
    * */
@@ -254,7 +257,6 @@ class PlayCountTable extends Component {
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'lastPlayed'}>Last Played{this.props.sortBy===SortBys.lastPlayed ? this.showSortDirection() : null}</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'dateAdded'}>Date Added{this.props.sortBy===SortBys.dateAdded ? this.showSortDirection() : null}</th>
         <th className="clickable-header-column" onClick={(e)=>dispatch(setSortFilter(this.changeSortDirection(e.target.id)))} id={'time'}>Time{this.props.sortBy===SortBys.time ? this.showSortDirection() : null}</th>
-        {/*<th id={'time'}>Time</th>*/}
       </tr>
       </thead>
     );
