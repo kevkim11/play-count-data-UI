@@ -41,6 +41,9 @@ function createAlbumName(item){
 }
 
 function sortTimestamps(item){
+  /**
+   Extra: Timestamps should already be sorted in db.
+   * */
   let timestamps = item["timestamps"].map((str)=>{
     return new Date(str);
   });
