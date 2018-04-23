@@ -39,7 +39,7 @@ class Footer extends Component{
 
     return (
       <div className={"footer"} style={footerStyle}>
-        <p> {total_items} items, {total_play_count} total play count </p>
+        <p> {total_items} tracks, {total_play_count} total play count </p>
       </div>
     )
   }
