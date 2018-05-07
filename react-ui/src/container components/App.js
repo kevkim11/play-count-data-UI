@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {fetchPlayedSongIfNeeded, SortBys, SortFilters, ViewBys, setViewFilter} from '../actions'
-import PlayCountTable from '../presentational components/PlayCountTable.js' // Container Component
+import PlayCountTable from '../presentational components/PlayCountTable2.js' // Container Component
 import Footer from '../presentational components/Footer.js' // Container Component
 import '../css/App.css';
 

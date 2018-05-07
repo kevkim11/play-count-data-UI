@@ -7,6 +7,7 @@ import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import App from './container components/App';
 import rootReducer from './reducers'
+import 'semantic-ui-css/semantic.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 

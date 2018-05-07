@@ -84,6 +84,9 @@ export function fetchPlayedSongs(){
         console.log(json);
         dispatch(receivedPlayedSongs(json)
       )})
+      .catch(e => {
+        console.log('the error is', e);
+      })
   }
 }
 
